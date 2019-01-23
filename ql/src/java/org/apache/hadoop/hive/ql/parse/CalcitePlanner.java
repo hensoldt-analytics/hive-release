@@ -284,7 +284,6 @@ import org.joda.time.Interval;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayDeque;
@@ -1665,8 +1664,7 @@ public class CalcitePlanner extends SemanticAnalyzer {
   }
 
   private boolean isUselessCause(Throwable t) {
-    return t instanceof RuntimeException || t instanceof InvocationTargetException
-        || t instanceof UndeclaredThrowableException;
+    return t instanceof RuntimeException || t instanceof InvocationTargetException;
   }
 
   private RowResolver genRowResolver(Operator op, QB qb) {
