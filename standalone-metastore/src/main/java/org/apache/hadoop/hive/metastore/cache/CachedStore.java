@@ -3059,6 +3059,10 @@ public class CachedStore implements RawStore, Configurable {
     setCachePrewarmedState(false);
   }
 
+  @Override public List<String> isPartOfMaterializedView(String catName, String dbName, String tblName) {
+     return rawStore.isPartOfMaterializedView(catName, dbName, tblName);
+   }
+
   @Override
   public void addRuntimeStat(RuntimeStat stat) throws MetaException {
     rawStore.addRuntimeStat(stat);
