@@ -3,7 +3,11 @@ SET hive.mapred.mode=nonstrict;
 SET hive.explain.user=false;
 
 dfs ${system:test.dfs.mkdir} ${system:test.tmp.dir}/testcase1;
+dfs ${system:test.dfs.mkdir} ${system:test.tmp.dir}/testcase2;
+dfs ${system:test.dfs.mkdir} ${system:test.tmp.dir}/testcase3;
 dfs -copyFromLocal ../../data/files/compressed_4line_file1.csv  ${system:test.tmp.dir}/testcase1/;
+dfs -copyFromLocal ../../data/files/compressed_4line_file1.csv  ${system:test.tmp.dir}/testcase2/;
+dfs -copyFromLocal ../../data/files/compressed_4line_file1.csv  ${system:test.tmp.dir}/testcase3/;
 --
 --
 CREATE EXTERNAL TABLE `testcase1`(id int, name string) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
@@ -11,11 +15,11 @@ CREATE EXTERNAL TABLE `testcase1`(id int, name string) ROW FORMAT SERDE 'org.apa
   TBLPROPERTIES ("skip.header.line.count"="1", "skip.footer.line.count"="1");
 
 CREATE EXTERNAL TABLE `testcase2`(id int, name string) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
-  LOCATION '${system:test.tmp.dir}/testcase1'
+  LOCATION '${system:test.tmp.dir}/testcase2'
   TBLPROPERTIES ("skip.header.line.count"="1", "skip.footer.line.count"="0");
 
 CREATE EXTERNAL TABLE `testcase3`(id int, name string) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
-  LOCATION '${system:test.tmp.dir}/testcase1'
+  LOCATION '${system:test.tmp.dir}/testcase3'
   TBLPROPERTIES ("skip.header.line.count"="0", "skip.footer.line.count"="1");
 
 SET hive.fetch.task.conversion = more;
@@ -41,24 +45,24 @@ select count(*) from testcase2;
 select * from testcase3;
 select count(*) from testcase3;
 
-dfs ${system:test.dfs.mkdir} ${system:test.tmp.dir}/testcase2;
-dfs ${system:test.dfs.mkdir} ${system:test.tmp.dir}/testcase3;
 dfs ${system:test.dfs.mkdir} ${system:test.tmp.dir}/testcase4;
-dfs -copyFromLocal ../../data/files/compressed_4line_file2.csv.bz2  ${system:test.tmp.dir}/testcase2/;
-dfs -copyFromLocal ../../data/files/compressed_4line_file2.csv.bz2  ${system:test.tmp.dir}/testcase3/;
+dfs ${system:test.dfs.mkdir} ${system:test.tmp.dir}/testcase5;
+dfs ${system:test.dfs.mkdir} ${system:test.tmp.dir}/testcase6;
 dfs -copyFromLocal ../../data/files/compressed_4line_file2.csv.bz2  ${system:test.tmp.dir}/testcase4/;
+dfs -copyFromLocal ../../data/files/compressed_4line_file2.csv.bz2  ${system:test.tmp.dir}/testcase5/;
+dfs -copyFromLocal ../../data/files/compressed_4line_file2.csv.bz2  ${system:test.tmp.dir}/testcase6/;
 --
 -- Stored encoded in Cache so need to create separate Tables
 CREATE EXTERNAL TABLE `testcase4`(id int, name string) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
-  LOCATION '${system:test.tmp.dir}/testcase2'
+  LOCATION '${system:test.tmp.dir}/testcase4'
   TBLPROPERTIES ("skip.header.line.count"="1", "skip.footer.line.count"="1");
 
 CREATE EXTERNAL TABLE `testcase5`(id int, name string) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
-  LOCATION '${system:test.tmp.dir}/testcase3'
+  LOCATION '${system:test.tmp.dir}/testcase5'
   TBLPROPERTIES ("skip.header.line.count"="1", "skip.footer.line.count"="0");
 
 CREATE EXTERNAL TABLE `testcase6`(id int, name string) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
-  LOCATION '${system:test.tmp.dir}/testcase4'
+  LOCATION '${system:test.tmp.dir}/testcase6'
   TBLPROPERTIES ("skip.header.line.count"="0", "skip.footer.line.count"="1");
 
 SET hive.fetch.task.conversion = more;
