@@ -18375,11 +18375,7 @@ class ReplTblWriteIdStateRequest {
   /**
    * @var string[]
    */
-  public $errorMessage = null;
-  /**
-   * @var bool
-   */
-  public $hasoldabort = null;
+  public $partNames = null;
 
   public function __construct($vals=null) {
     if (!isset(self::$_TSPEC)) {
@@ -18412,10 +18408,6 @@ class ReplTblWriteIdStateRequest {
             'type' => TType::STRING,
             ),
           ),
-        14 => array(
-          'var' => 'hasoldabort',
-          'type' => TType::BOOL,
-          ),
         );
     }
     if (is_array($vals)) {
@@ -18436,9 +18428,6 @@ class ReplTblWriteIdStateRequest {
       }
       if (isset($vals['partNames'])) {
         $this->partNames = $vals['partNames'];
-      }
-      if (isset($vals['hasoldabort'])) {
-        $this->hasoldabort = $vals['hasoldabort'];
       }
     }
   }
@@ -18514,13 +18503,6 @@ class ReplTblWriteIdStateRequest {
             $xfer += $input->skip($ftype);
           }
           break;
-        case 14:
-          if ($ftype == TType::BOOL) {
-            $xfer += $input->readBool($this->hasoldabort);
-          } else {
-            $xfer += $input->skip($ftype);
-          }
-          break;
         default:
           $xfer += $input->skip($ftype);
           break;
@@ -18559,59 +18541,9 @@ class ReplTblWriteIdStateRequest {
       $xfer += $output->writeString($this->tableName);
       $xfer += $output->writeFieldEnd();
     }
-    if ($this->hasoldabort !== null) {
-      $xfer += $output->writeFieldBegin('hasoldabort', TType::BOOL, 14);
-      $xfer += $output->writeBool($this->hasoldabort);
-      $xfer += $output->writeFieldEnd();
-    }
-    $xfer += $output->writeFieldStop();
-    $xfer += $output->writeStructEnd();
-    return $xfer;
-  }
-
-}
-
-class OptionalCompactionInfoStruct {
-  static $_TSPEC;
-
-  /**
-   * @var \metastore\CompactionInfoStruct
-   */
-  public $ci = null;
-
-  public function __construct($vals=null) {
-    if (!isset(self::$_TSPEC)) {
-      self::$_TSPEC = array(
-        1 => array(
-          'var' => 'ci',
-          'type' => TType::STRUCT,
-          'class' => '\metastore\CompactionInfoStruct',
-          ),
-        );
-    }
-    if (is_array($vals)) {
-      if (isset($vals['ci'])) {
-        $this->ci = $vals['ci'];
-      }
-    }
-  }
-
-  public function getName() {
-    return 'OptionalCompactionInfoStruct';
-  }
-
-  public function read($input)
-  {
-    $xfer = 0;
-    $fname = null;
-    $ftype = 0;
-    $fid = 0;
-    $xfer += $input->readStructBegin($fname);
-    while (true)
-    {
-      $xfer += $input->readFieldBegin($fname, $ftype, $fid);
-      if ($ftype == TType::STOP) {
-        break;
+    if ($this->partNames !== null) {
+      if (!is_array($this->partNames)) {
+        throw new TProtocolException('Bad type in structure.', TProtocolException::INVALID_DATA);
       }
       $xfer += $output->writeFieldBegin('partNames', TType::LST, 6);
       {
@@ -35862,3 +35794,5 @@ final class Constant extends \Thrift\Type\TConstant {
     return "hive.sql.";
   }
 }
+
+
