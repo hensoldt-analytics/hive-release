@@ -66,7 +66,6 @@ public class Initiator extends CompactorThread {
   static final private String COMPACTORTHRESHOLD_PREFIX = "compactorthreshold.";
 
   private long checkInterval;
-  private long prevStart = -1;
 
   @Override
   public void run() {
@@ -93,10 +92,6 @@ public class Initiator extends CompactorThread {
         try {
           handle = txnHandler.getMutexAPI().acquireLock(TxnStore.MUTEX_KEY.Initiator.name());
           startedAt = System.currentTimeMillis();
-
-          long compactionInterval = (prevStart < 0) ? prevStart : (startedAt - prevStart)/1000;
-          prevStart = startedAt;
-
           //todo: add method to only get current i.e. skip history - more efficient
           ShowCompactResponse currentCompactions = txnHandler.showCompact(new ShowCompactRequest());
 
