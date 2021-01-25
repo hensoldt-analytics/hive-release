@@ -2580,7 +2580,7 @@ abstract class TxnHandler implements TxnStore, TxnStore.MutexAPI {
           if (filter.length() > 0) {
             filter.append(" and ");
           }
-          filter.append("\"HL_TXNID\"=" + rqst.getTxnid());
+          filter.append("hl_txnid=" + rqst.getTxnid());
         }
         String whereClause = filter.toString();
 
